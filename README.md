@@ -50,4 +50,9 @@ from sklearn.cluster import KMeans
 kmeans = KMeans(n_clusters=4, random_state=42, n_init=10)
 rfm_data["Cluster"] = kmeans.fit_predict(rfm_data)
 
-![RFM Clustering](images/newplot.png)
+```markdown
+![RFM Clustering](https://raw.githubusercontent.com/Pariman1419/online_retail_II/main/newplot.png)
+
+
+
+
