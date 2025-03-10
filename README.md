@@ -1,5 +1,4 @@
-
-# 🛒 Online Retail Dataset - Machine Learning Project (Unsupervised Learning)
+# 🛂 Online Retail Dataset - Machine Learning Project
 
 ## 📌 Overview
 โปรเจกต์นี้เป็นการวิเคราะห์และพัฒนาโมเดล Machine Learning โดยใช้ **Online Retail Dataset** จาก Kaggle ซึ่งเป็นข้อมูลเกี่ยวกับธุรกิจอีคอมเมิร์ซ โดยมีเป้าหมายเพื่อวิเคราะห์พฤติกรรมลูกค้า คาดการณ์แนวโน้มยอดขาย และค้นหากลุ่มลูกค้าที่มีมูลค่าสูง
@@ -19,74 +18,36 @@
 ## 🎯 Goals & Objectives
 1. **Data Cleaning & Preprocessing**: จัดการค่าข้อมูลที่หายไป และเตรียมข้อมูลให้เหมาะสมกับโมเดล
 2. **Exploratory Data Analysis (EDA)**: วิเคราะห์แนวโน้มของลูกค้าและสินค้าขายดี
-3. **Customer Segmentation**: แบ่งกลุ่มลูกค้าด้วยเทคนิค **K-Means Clustering** และ **DBSCAN**
-4. **Sales Prediction**: (ลบออกเพื่อไม่ให้ขัดกับ Unsupervised Learning)
+3. **Customer Segmentation**: แบ่งกลุ่มลูกค้าด้วยเทคนิค **RFM Analysis + K-Means Clustering**
 
 ## 🔧 Technologies & Tools
 - **Python** 🐍
 - **Pandas, NumPy** (Data Processing)
-- **Matplotlib, Seaborn, Plotly** (Data Visualization)
+- **Matplotlib, Seaborn** (Data Visualization)
 - **Scikit-Learn** (Machine Learning)
-- **Kaggle API** (For downloading datasets)
+- **Power BI** (Dashboard & Visualization)
 
 ## 🚀 Implementation Steps
-1. **Data Preprocessing**
-   - ตรวจสอบและลบค่าที่ขาดหาย
-   - แปลงวันที่ให้เป็นฟอร์แมตที่เหมาะสม
-   - คำนวณยอดขาย (TotalPrice = Quantity × UnitPrice)
+### 1. Data Preprocessing
+- ตรวจสอบและลบค่าที่ขาดหาย
+- แปลงวันที่ให้เป็นฟอร์แมตที่เหมาะสม
+- คำนวณยอดขาย (`TotalPrice = Quantity × UnitPrice`)
 
-```python
-import pandas as pd
+### 2. Exploratory Data Analysis (EDA)
+- วิเคราะห์ยอดขายรายวัน/เดือน
+- ค้นหาสินค้าขายดีและลูกค้ารายใหญ่
+- วาดกราฟแสดง Distribution ของข้อมูล
 
-# Load dataset
-retail = pd.read_excel("path/to/online_retail_II.xlsx")
+### 3. Customer Segmentation (RFM Analysis)
+RFM Analysis เป็นเทคนิคที่ใช้แบ่งกลุ่มลูกค้าตามพฤติกรรมการซื้อ โดยพิจารณาจาก:
+- **Recency (R)**: ลูกค้าซื้อสินค้าล่าสุดเมื่อไหร่
+- **Frequency (F)**: ลูกค้าซื้อบ่อยแค่ไหน
+- **Monetary (M)**: ลูกค้าใช้จ่ายทั้งหมดเท่าไหร่
 
-# Drop missing values
-retail = retail.dropna()
-
-# Create TotalPrice column
-retail["TotalPrice"] = retail["Quantity"] * retail["UnitPrice"]
-
-# Convert InvoiceDate to datetime
-retail["InvoiceDate"] = pd.to_datetime(retail["InvoiceDate"])
-```
-
-2. **Customer Segmentation (Clustering)**
-   - ใช้ **K-Means** เพื่อแบ่งกลุ่มลูกค้า
-   - คำนวณค่า Silhouette Score เพื่อเลือกจำนวนคลัสเตอร์ที่เหมาะสม
-
+**การแบ่งกลุ่มด้วย K-Means Clustering**
 ```python
 from sklearn.cluster import KMeans
-import matplotlib.pyplot as plt
+kmeans = KMeans(n_clusters=4, random_state=42, n_init=10)
+rfm_data["Cluster"] = kmeans.fit_predict(rfm_data)
 
-# Feature selection
-X = retail.groupby("CustomerID").agg({"TotalPrice": "sum"}).reset_index()
-
-# Apply K-Means
-kmeans = KMeans(n_clusters=3, random_state=42)
-X["Cluster"] = kmeans.fit_predict(X[["TotalPrice"]])
-
-# Scatter plot of clusters
-plt.scatter(X["CustomerID"], X["TotalPrice"], c=X["Cluster"], cmap="viridis")
-plt.xlabel("Customer ID")
-plt.ylabel("Total Spending")
-plt.title("Customer Segmentation using K-Means")
-plt.show()
-```
-
-## 📊 Results & Insights
-- พบว่าบางกลุ่มสินค้ามียอดขายสูงมากในช่วงเทศกาล
-- ลูกค้ามีพฤติกรรมการซื้อที่แตกต่างกัน โดยสามารถแบ่งออกเป็น **5 กลุ่มหลัก**
-- โมเดล **K-Means**  ช่วยในการแบ่งกลุ่มลูกค้าได้ดี
-
-## 📌 Future Improvements
-- ใช้ **Deep Learning** สำหรับการพยากรณ์ยอดขาย
-- สร้าง **Recommendation System** เพื่อแนะนำสินค้าให้ลูกค้า
-- วิเคราะห์พฤติกรรมลูกค้าแบบ Real-time ด้วย **Power BI**
-
-## 📜 References
-- [Online Retail Dataset](https://www.kaggle.com/datasets/lakshmi25npathi/online-retail-dataset)
-- [Scikit-Learn Documentation](https://scikit-learn.org/)
-- [Pandas Official Documentation](https://pandas.pydata.org/)
-- [Kaggle API Documentation](https://www.kaggle.com/docs/api)
-- [Customer Segmentation with RFM Analysis](https://lengyi.medium.com/customer-segmentation-with-rfm-analysis-c57b18c8ff8f)
+![RFM Clustering](images/newplot.png)
