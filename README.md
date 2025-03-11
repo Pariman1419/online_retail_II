@@ -22,7 +22,7 @@
 
 ## 🔧 Technologies & Tools
 - **Python** 🐍
-- **Pandas, NumPy** (Data Processing)
+- **Pandas, NumPy** (Data Cleaning & Data Processing)
 - **Matplotlib, Seaborn** (Data Visualization)
 - **Scikit-Learn** (Machine Learning)
 - **Power BI** (Dashboard & Visualization)
